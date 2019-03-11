@@ -6,11 +6,11 @@ RUN apk add --update python python-dev py-pip build-base postgresql-dev git && p
 RUN git clone https://github.com/surgeventures/newrelic-plugin-agent.git src
 
 WORKDIR /src
-RUN git checkout feature/use-pgbouncer-1.9 && python setup.py install && rm -rf /src
+RUN python setup.py install && rm -rf /src
 
 WORKDIR /
 RUN mkdir -p /etc/newrelic /var/log/newrelic /var/run/newrelic
 ADD newrelic-plugin-agent.cfg /etc/newrelic/newrelic-plugin-agent.cfg
+ADD bin/newrelic-plugin-agent.sh newrelic-plugin-agent.sh
 
-ENTRYPOINT ["sh","-c"]
-CMD ["exec newrelic-plugin-agent -f -c /etc/newrelic/newrelic-plugin-agent.cfg"]
+ENTRYPOINT ["/newrelic-plugin-agent.sh"]
