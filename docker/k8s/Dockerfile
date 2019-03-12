@@ -1,16 +1,18 @@
 FROM alpine:latest
 
 MAINTAINER sre@shedul.com
+ENV ROOT_DIR docker/k8s
 
-RUN apk add --update python python-dev py-pip build-base postgresql-dev git && pip install pyyaml psycopg2 && rm -rf /var/cache/apk/*
-RUN git clone https://github.com/surgeventures/newrelic-plugin-agent.git src
-
+COPY ./ src
 WORKDIR /src
-RUN python setup.py install && rm -rf /src
 
-WORKDIR /
+RUN apk add --update python python-dev py-pip build-base postgresql-dev && \
+		pip install pyyaml psycopg2 && \
+		python setup.py install && \
+		rm -rf /var/cache/apk/*
+
 RUN mkdir -p /etc/newrelic /var/log/newrelic /var/run/newrelic
-ADD newrelic-plugin-agent.cfg /etc/newrelic/newrelic-plugin-agent.cfg
-ADD bin/newrelic-plugin-agent.sh newrelic-plugin-agent.sh
+ADD $ROOT_DIR/newrelic-plugin-agent.cfg /etc/newrelic/newrelic-plugin-agent.cfg
+ADD $ROOT_DIR/bin/newrelic-plugin-agent.sh /newrelic-plugin-agent.sh
 
 ENTRYPOINT ["/newrelic-plugin-agent.sh"]
