@@ -38,12 +38,12 @@ class PgBouncer(postgresql.PostgreSQL):
             self.add_derive_value('%s/Query Time' % metric, 'seconds',
                                   database['total_query_time'])
             self.add_derive_value('%s/Requests' % metric, 'requests',
-                                  database['total_requests'])
+                                  database['total_query_count'])
             self.add_derive_value('%s/Data Sent' % metric, 'bytes',
                                   database['total_sent'])
             self.add_derive_value('%s/Data Received' % metric, 'bytes',
                                   database['total_received'])
-            requests += database['total_requests']
+            requests += database['total_query_count']
 
         self.add_derive_value('Overview/Requests', 'requests', requests)
 
