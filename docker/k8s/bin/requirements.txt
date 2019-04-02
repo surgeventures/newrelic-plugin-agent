@@ -1,2 +1,2 @@
-kubernetes
-flake8
+kubernetes==8.0.0
+flake8==3.5.0

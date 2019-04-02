@@ -12,7 +12,7 @@ def k8s_client_config():
 
 def base_config():
     logging.basicConfig()
-    logger = logging.getLogger('rds-cleaner')
+    logger = logging.getLogger('pgbouncer-monitoring')
     logger.setLevel(logging.INFO)
     parser = argparse.ArgumentParser()
     parser.add_argument('--pod-name', dest='pod_name', help='pod name to get suffix for', type=str, required=True)
