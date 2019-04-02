@@ -26,5 +26,5 @@ So if we have pgbouncer in a high-availability mode we can't see detailed monito
 To overcome this limitation we use script that connect to k8s api and check deployed pgbouncer pods. 
 If there is more than one pod script sorts them in descending order and return pod index in the list. 
 This suffix is added to PGBOUNCER_NAME so those two instances will be visible as two separated pgbouncer deployment in monitoring
-We need to ensure that rolling update policy is changed to . 
-So new pods are deployed first and script see them all and is able to count suffix correctly
+We need to ensure that new pods are created in parallel. Thats why we modified rolling update maxSurge parameter in Chart to number of replicas deployed. 
+So new pods are deployed first and script see them all and is able to count suffix correctly.
