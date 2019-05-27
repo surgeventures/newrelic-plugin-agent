@@ -228,6 +228,7 @@ class NewRelicPluginAgent(helper.Controller):
                                      timeout=self.config.get('newrelic_api_timeout', 10),
                                      verify=self.config.get('verify_ssl_cert',
                                                             True))
+            response.raise_for_status()
             LOGGER.debug('Response: %s: %r',
                          response.status_code,
                          response.content.strip())
@@ -235,6 +236,10 @@ class NewRelicPluginAgent(helper.Controller):
             LOGGER.error('Error reporting stats: %s', error)
         except requests.Timeout as error:
             LOGGER.error('TimeoutError reporting stats: %s', error)
+        except requests.HTTPError as error:
+            LOGGER.error('Response: %s: %r',
+                            error.response.status_code,
+                            error.response.content.strip())
 
     @staticmethod
     def _get_plugin(plugin_path):
