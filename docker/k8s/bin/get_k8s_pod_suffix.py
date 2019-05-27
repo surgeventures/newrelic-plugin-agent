@@ -30,7 +30,7 @@ def get_pod_suffix(pod_name, pod_namespace, logger):
     v1, apps_v1 = k8s_client_config()
     pods = v1.list_namespaced_pod(namespace=pod_namespace)
     for pod in pods.items:
-        if pod.metadata.labels.get("app") == "pgbouncer":
+        if pod.metadata.labels != None and pod.metadata.labels.get("app") == "pgbouncer":
             replica_set_name = pod.metadata.owner_references[0].name
             pgbouncer_rs[replica_set_name] = pgbouncer_rs.get(replica_set_name, 0) + 1
             pgbouncer_pods.append({"name": pod.metadata.name,
